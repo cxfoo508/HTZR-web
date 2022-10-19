@@ -1,0 +1,10 @@
+#print(yaml.dump(yaml.load("2.yml"), default_flow_style=False))
+o: 
+  caa: 1
+  jkk: 2
+  ksk: aak
+  lst:
+    - 1
+    - 2
+    - 3
+    - 5

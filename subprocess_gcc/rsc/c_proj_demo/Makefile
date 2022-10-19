@@ -1,0 +1,1 @@
+gcc maintest.c -o maintest.exe

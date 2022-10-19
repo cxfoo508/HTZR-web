@@ -1,0 +1,167 @@
+# different case is put in different testcase.c, but can be called from main one by one.
+# C语言原生字符串应该用'"xxx"'表示
+case1: 
+  id: 1
+  name: test_pthread_create
+  description: 此测例用于测试线程创建正确性
+  people: KK, PP, LL
+  headerFiles: 
+    - pthread.h
+  defFuncList:
+    - func_def1:
+        type: void*
+        template: ~
+        description: nothing
+        params: 
+          - id: int*
+        return: "NULL"
+    - func_def2:
+        type: int
+        template: for-loop
+        description: nothing
+        params: ~
+        return: 0
+  declareList:
+    - pthread_id:
+        type: int*
+        val: ~
+    - structA:
+        type: WeightMsg
+        val:
+          - name: 
+              type: char*
+              val: '"jenny"'
+          - time:
+              type: DateC
+              val:
+                - year:
+                    type: unsigned long
+                    val: 2022
+                - month:
+                    type: int
+                    val: 10
+                - day:
+                    type: int
+                    val: 22
+          - count: 
+              type: float
+              val: 22.33
+
+  # flow暂时仅支持int(void)定义
+  flowInfo: 测试创建线程主入口1
+  #flowReturn:
+  #  type: 
+  #  name: 
+  flows:
+    - pthread_create: 
+        description: 首先创建线程
+        paramList:
+          - param1: 
+              name: pthread_id
+              cfg: overflow
+              type: pthread_t*
+          - param2:
+              name: "NULL"
+              cfg: ~
+              type: ~
+          - param3:
+              name: func_def1
+              cfg: ~
+              type: ~
+          - param4:
+              name: "NULL"
+              cfg: ~
+              type: ~
+        result:
+          name: status0
+          isNew: y
+          type: int
+        checks:
+          - status0: 0
+          - pthread_id: 
+              val: 0
+              op: "!="
+  clearFlowList:
+    - pthread_join:
+        paramList:
+          - param1:
+              name: pthread_id
+              cfg: ~
+              type: int
+        
+case2: 
+  id: 2
+  name: test_pthread_delete
+  description: 此测例用于测试线程删除正确性
+  flowInfo: 测试删除线程主入口2
+  people: KK
+  headerFiles: 
+    - pthread.h
+  defFuncList:
+    - func_def3:
+        type: void*
+        template: ~
+        description: 线程函数主体
+        params: 
+          - id: int*
+        return: "NULL"
+  declareList:
+    - pthread_id:
+        type: pthread_t*
+        len: ~
+        val: ~
+    - some_str:
+        type: char*
+        len: ~
+        val: '"show_string"'
+  flows:
+    - pthread_create: 
+        description: ~
+        paramList:
+          - param1: 
+              name: pthread_id
+              cfg: ~
+              type: pthread_t*
+          - param2:
+              name: "NULL"
+              cfg: ~
+              type: ~
+          - param3:
+              name: func_def3
+              cfg: ~
+              type: ~
+          - param4:
+              name: "NULL"
+              cfg: ~
+              type: ~
+        result:
+          name: status0
+          isNew: y
+          type: int
+        checks:
+          - status0: 0
+          - pthread_id: 
+              val: 0
+              op: "!="
+    - pthread_join:
+        paramList:
+          - param1:
+              name: 0
+              cfg: ~
+              type: int
+          - param2: 
+              name: pthread_id
+              cfg: ~
+              type: int*
+          - param3: 
+              name: status0
+              cfg: ~
+              type: ~
+        result:
+          name: status0
+          isNew: ~
+          type: int
+        checks:
+          - status0: 
+              val: 0
+              op: ==
